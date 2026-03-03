@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+incidents/
+*.db
+*.jpg
+*.gif
+*.png
+heatmap_snapshot.jpg
+timeline_graph.png
+dispatch_timeline_*.png
+risk_breakdown_*.png
+incidents.csv

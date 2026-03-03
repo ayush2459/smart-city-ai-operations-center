@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="31cacae3-a0ca-440b-8d7c-faec521afb2b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ .gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/AID_System.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_0.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_12.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_14.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_2.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_4.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_5.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_8.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/accident/clip_9.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_1.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_10.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_11.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_13.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_15.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_3.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_6.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataset/train/normal/clip_7.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/AUTHORS" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/BUGS" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/NEWS" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/fontconfig/20-unhint-small-dejavu-sans-mono.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/fontconfig/20-unhint-small-dejavu-sans.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/fontconfig/20-unhint-small-dejavu-serif.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/fontconfig/57-dejavu-sans-mono.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/fontconfig/57-dejavu-sans.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/fontconfig/57-dejavu-serif.conf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/langcover.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/status.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuMathTeXGyre.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-BoldOblique.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-ExtraLight.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-Oblique.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansCondensed-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansCondensed-BoldOblique.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansCondensed-Oblique.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansCondensed.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansMono-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansMono-BoldOblique.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansMono-Oblique.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSansMono.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerif-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerif-BoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerif-Italic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerif.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerifCondensed-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerifCondensed-BoldItalic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerifCondensed-Italic.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSerifCondensed.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fonts/dejavu-fonts-ttf-2.37/unicover.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/big_video.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/input/traffic.mp4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/schemas.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/split_video.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/train_model.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/detector.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/incident_logic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/tracker.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="3A5HKmW9uJyY5CQSaWJ4Y8FIoDC" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ayushgupta/PycharmProjects/AID_System/fonts&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/fonts" />
+      <recent name="$PROJECT_DIR$/dataset/train/accident" />
+      <recent name="$PROJECT_DIR$/dataset/train/normal" />
+      <recent name="$PROJECT_DIR$/input" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/models" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="pip install -r requirements.txt" />
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="AID_System" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-ca5e2b39c7df-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.308" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="31cacae3-a0ca-440b-8d7c-faec521afb2b" name="Changes" comment="" />
+      <created>1771875449867</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771875449867</updated>
+    </task>
+    <servers />
+  </component>
+</project>

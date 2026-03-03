@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart City AI Operations Center</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0b0f14;
+            color: #e2e8f0;
+        }
+
+        h1 {
+    margin: 0;
+    padding: 18px 20px;
+    background: linear-gradient(to right, #0f172a, #111827, #0f172a);
+    border-bottom: 1px solid #1f2937;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 2px;
+    font-size: 28px;
+}
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.4fr 2fr 1.2fr;
+            grid-template-rows: auto auto auto;
+            gap: 18px;
+            padding: 18px;
+            transition: all 0.4s ease;
+        }
+
+        .panel {
+            background: #111827;
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid #1f2937;
+        }
+.panel {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.panel:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(59,130,246,0.15);
+}
+        .panel h2 {
+            margin-top: 0;
+            font-size: 16px;
+            font-weight: 500;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 6px;
+        }
+.panel.mapPanel {
+    grid-row: span 2;
+}
+
+.panel.snapshotPanel {
+    grid-row: span 2;
+}
+.panel canvas {
+    margin-top: 10px;
+}
+.cameraGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.cameraFeed {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+.cameraFeed:hover {
+    transform: scale(1.02);
+}
+
+        /* COUNTERS */
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .statBox {
+    flex: 1;
+    background: linear-gradient(145deg, #0f172a, #111827);
+    padding: 14px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #1f2937;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.statBox:hover {
+    transform: translateY(-2px);
+}
+
+        .statBox h3 {
+            margin: 5px 0;
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        /* MAPS */
+        #map {
+    height: 520px;   /* Increased */
+    border-radius: 8px;
+}
+
+#miniMap {
+    height: 260px;
+    border-radius: 8px;
+}
+
+        /* PROBABILITY */
+        .probBarContainer {
+            width: 100%;
+            height: 18px;
+            background: #1f2937;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .probBar {
+            height: 100%;
+            width: 0%;
+            background: #22c55e;
+            transition: width 0.4s ease;
+        }
+.pressureWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pressureValue {
+    position: absolute;
+    bottom: 25px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #ef4444;
+}
+        /* SNAPSHOTS */
+        #snapshotContainer {
+    max-height: 420px;  /* Increased */
+    overflow-y: auto;
+}
+
+        .snapshotCard {
+            background: #0f172a;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        /* LOG */
+        #decisionLog {
+            max-height: 260px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+
+        .logEntry {
+            border-bottom: 1px solid #1f2937;
+            padding: 5px 0;
+        }
+
+        /* CONTROL */
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #1f2937;
+            border: none;
+            color: #e2e8f0;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #374151;
+        }
+
+        input {
+            background: #1f2937;
+            border: none;
+            padding: 4px;
+            border-radius: 4px;
+            color: white;
+        }
+
+        body.critical {
+            background: #3f0d0d;
+        }
+        /* ===== PROFESSIONAL STATUS GLOW ===== */
+
+.statBox {
+    transition: box-shadow 0.4s ease, border 0.4s ease;
+}
+
+.statBox.glow-critical {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.7);
+    border: 1px solid rgba(220, 38, 38, 0.9);
+}
+
+.statBox.glow-high {
+    box-shadow: 0 0 16px rgba(249, 115, 22, 0.6);
+    border: 1px solid rgba(249, 115, 22, 0.8);
+}
+
+.statBox.glow-normal {
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.4);
+    border: 1px solid rgba(34, 197, 94, 0.6);
+}
+
+/* ===== ALERT BAR ===== */
+
+.alertBar {
+    height: 6px;
+    width: 100%;
+    background: transparent;
+    transition: background 0.4s ease;
+}
+
+.alertBar.critical {
+    background: linear-gradient(to right, #7f1d1d, #dc2626);
+}
+
+.alertBar.high {
+    background: linear-gradient(to right, #78350f, #f97316);
+}
+.cityBanner {
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    background: #0f172a;
+    border-bottom: 1px solid #1f2937;
+    letter-spacing: 0.5px;
+}
+    </style>
+</head>
+
+<body>
+
+<audio id="siren" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+
+<h1>Smart City AI Operations Center</h1>
+<div id="cityRiskBanner" class="cityBanner"></div>
+<div id="alertBar" class="alertBar"></div>
+
+<div class="layout">
+    <div class="panel">
+    <h2>Zone Leaderboard</h2>
+    <div id="zoneLeaderboard"></div>
+
+    <h3 style="margin-top:10px;">Escalation Probability</h3>
+    <div id="zonePredictions"></div>
+</div>
+
+    <div class="panel">
+    <h2>Live Camera Grid</h2>
+
+    <div class="cameraGrid">
+        <img src="/video" class="cameraFeed">
+        <img src="/video" class="cameraFeed">
+        <img src="/video" class="cameraFeed">
+        <img src="/video" class="cameraFeed">
+    </div>
+</div>
+
+    <!-- COUNTERS -->
+    <div class="panel">
+        <h2>Incident Statistics</h2>
+        <div class="stats">
+
+    <div class="statBox" id="criticalTile">
+    🚨 Critical
+    <h3 id="criticalCount">0</h3>
+</div>
+
+    <div class="statBox">
+        ⚠ High
+        <h3 id="highCount">0</h3>
+    </div>
+
+    <div class="statBox">
+        📊 Total
+        <h3 id="totalCount">0</h3>
+    </div>
+
+    <div class="statBox">
+        🎥 Active Cameras
+        <h3 id="cameraCount">4</h3>
+    </div>
+
+</div>
+
+<div class="statBox">
+    🟢 System Status
+    <h3 id="systemStatus">ONLINE</h3>
+</div>
+
+<div class="statBox">
+    📈 Incident Rate (1 min)
+    <h3 id="incidentRate">0</h3>
+</div>
+
+<div class="statBox">
+    🧠 Risk Trend
+    <h3 id="riskTrend">STABLE</h3>
+</div>
+
+        <h2 style="margin-top:15px;">Accident Probability</h2>
+        <div class="probBarContainer">
+            <div id="probBar" class="probBar"></div>
+        </div>
+        <canvas id="probChart" height="80"></canvas>
+        <h3 style="margin-top:15px;">5-Min Risk Forecast</h3>
+        <canvas id="forecastChart" height="100"></canvas>
+    </div>
+
+    <!-- MAIN MAP -->
+    <div class="panel mapPanel">
+        <h2>City Incident Map</h2>
+        <div id="map"></div>
+    </div>
+
+    <!-- MINI GPS -->
+    <div class="panel">
+        <h2>Vehicle Tracker</h2>
+        <div id="miniMap"></div>
+    </div>
+
+    <!-- SNAPSHOTS -->
+    <div class="panel snapshotPanel">
+        <h2>Incident Snapshots</h2>
+        <div id="snapshotContainer"></div>
+    </div>
+
+<div class="panel">
+    <h2>Advanced Zone Analytics</h2>
+    <canvas id="zoneBarChart" height="150"></canvas>
+</div>
+
+    <div class="panel">
+        <h2>City Pressure Index</h2>
+        <div class="pressureWrapper">
+    <canvas id="pressureGauge" height="160"></canvas>
+    <div id="pressureValue" class="pressureValue">0</div>
+        </div>
+    </div>
+
+    <!-- LOG + CONTROL -->
+    <div class="panel">
+    <h2>AI Decision Log</h2>
+    <div id="decisionLog"></div>
+</div>
+
+<div class="panel">
+    <h2>Anomaly Spike Detector</h2>
+    <canvas id="anomalyChart" height="160"></canvas>
+</div>
+
+<div class="panel">
+    <h2 style="margin-top:15px;">Controls</h2>
+    <div class="controls">
+        <button onclick="toggleDL()">Toggle DL</button>
+        <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+        <input type="number" id="thresholdInput" step="0.1" min="0" max="1">
+        <button onclick="setThreshold()">Set Threshold</button>
+    </div>
+</div>
+    </div>  <!-- END layout -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+const socket = new WebSocket("ws://" + window.location.host + "/ws");
+// 🔊 Siren Unlock Setup
+let siren = document.getElementById("siren");
+let audioUnlocked = false;
+
+document.body.addEventListener("click", () => {
+    if (!audioUnlocked) {
+        siren.play().then(() => {
+            siren.pause();
+            siren.currentTime = 0;
+            audioUnlocked = true;
+        }).catch(() => {});
+    }
+});
+// MAP INIT
+const ZONE_COORDINATES = {
+    "Connaught Place": {lat: 28.6315, lng: 77.2167},
+    "India Gate": {lat: 28.6129, lng: 77.2295},
+    "Karol Bagh": {lat: 28.6519, lng: 77.1909},
+    "Lajpat Nagar": {lat: 28.5677, lng: 77.2436}
+};
+const map = L.map('map').setView([28.6139, 77.2090], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+const miniMap = L.map('miniMap').setView([28.6139, 77.2090], 15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(miniMap);
+
+let vehicleMarkers = {};
+function updateVehicle(id, lat, lng){
+    if(!vehicleMarkers[id]){
+        vehicleMarkers[id]=L.circleMarker([lat,lng],{radius:4,color:"lime"}).addTo(miniMap);
+    }else{
+        vehicleMarkers[id].setLatLng([lat,lng]);
+    }
+}
+// Existing Accident Probability Chart
+const ctx = document.getElementById("probChart").getContext("2d");
+
+const chart = new Chart(ctx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Accident Probability (%)",
+            data: [],
+            borderColor: "#ef4444",
+            backgroundColor: "rgba(239,68,68,0.2)",
+            tension: 0.3
+        }]
+    },
+    options: {
+        animation: false,
+        scales: {
+            y: {
+                min: 0,
+                max: 100
+            }
+        }
+    }
+});
+
+// 🔮 5-Min Risk Forecast Chart
+const forecastCtx = document.getElementById("forecastChart").getContext("2d");
+
+const forecastChart = new Chart(forecastCtx, {
+    type: "line",
+    data: {
+        labels: ["Now", "1m", "2m", "3m", "4m", "5m"],
+        datasets: [{
+            label: "Projected Risk",
+            data: [0,0,0,0,0,0],
+            borderColor: "#22c55e",
+            tension: 0.3
+        }]
+    },
+    options: {
+        animation: { duration: 500 },
+        scales: {
+            y: { min: 0, max: 200 }
+        }
+    }
+});
+// 📊 Advanced Zone Analytics Chart (CREATE ONCE)
+
+const zoneCtx = document.getElementById("zoneBarChart").getContext("2d");
+
+const zoneChart = new Chart(zoneCtx, {
+    type: "bar",
+    data: {
+        labels: [],
+        datasets: [{
+            label: "Zone Risk Index",
+            data: [],
+            backgroundColor: "#3b82f6"
+        }]
+    },
+    options: {
+        animation: { duration: 800 },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+
+
+// 🌡 City Pressure Gauge (ADD HERE)
+
+const pressureCtx = document.getElementById("pressureGauge").getContext("2d");
+
+const pressureChart = new Chart(pressureCtx, {
+    type: "doughnut",
+    data: {
+        labels: ["Active Risk", "Remaining"],
+        datasets: [{
+            data: [0, 200],
+            backgroundColor: ["#ef4444", "#1f2937"],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        rotation: -90,
+        circumference: 180,
+        cutout: "70%",
+        plugins: { legend: { display: false } }
+    }
+});
+
+// 🚨 Live Anomaly Spike Chart (CREATE ONCE)
+
+const anomalyCtx = document.getElementById("anomalyChart").getContext("2d");
+
+const anomalyChart = new Chart(anomalyCtx, {
+    type: "line",
+    data: {
+        labels: [],
+        datasets: [
+            {
+                label: "Incident Activity",
+                data: [],
+                borderColor: "#60a5fa",
+                tension: 0.3
+            },
+            {
+                label: "Anomaly Threshold",
+                data: [],
+                borderColor: "#ef4444",
+                borderDash: [5,5],
+                tension: 0.3
+            }
+        ]
+    },
+    options: {
+        animation: false,
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
+function updateChart(val){
+    if(chart.data.labels.length>20){
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+    }
+    chart.data.labels.push("");
+    chart.data.datasets[0].data.push(val);
+    chart.update();
+}
+
+// Counters
+function animateCounter(id,val){
+    document.getElementById(id).innerText=val;
+}
+
+// Log
+function addLog(text){
+    const div=document.createElement("div");
+    div.className="logEntry";
+    div.innerText=new Date().toLocaleTimeString()+" - "+text;
+    document.getElementById("decisionLog").prepend(div);
+}
+
+// Controls
+function toggleDL(){ fetch("/toggle-dl",{method:"POST"}); }
+function toggleHeatmap(){ fetch("/toggle-heatmap",{method:"POST"}); }
+function setThreshold(){
+    fetch("/set-threshold",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:document.getElementById("thresholdInput").value
+    });
+}
+function downloadReport(index){
+    window.open(`/report/${index}`, "_blank");
+}
+let incidentLayer = L.layerGroup().addTo(map);
+let zoneHeatLayer = L.layerGroup().addTo(map);
+
+function updateCityRisk() {
+
+    fetch("/city-analytics")
+    .then(res => res.json())
+    .then(data => {
+
+        const index = data.city_risk_index;
+
+        let status = "STABLE";
+        let color = "lime";
+
+        if (index > 140) {
+            status = "CRITICAL CITY CONDITION";
+            color = "red";
+        } else if (index > 90) {
+            status = "ELEVATED RISK";
+            color = "orange";
+        }
+
+        const banner = document.getElementById("cityRiskBanner");
+        banner.innerText = `City Risk Index: ${index} — ${status}`;
+        banner.style.color = color;
+        if (index > 140 && map.getZoom() < 14) {
+    map.flyTo([28.6139, 77.2090], 14, { duration: 1.2 });
+}
+    });
+}
+
+setInterval(updateCityRisk, 5000);
+
+
+function updateLeaderboard() {
+
+    fetch("/zone-leaderboard")
+    .then(res => res.json())
+    .then(data => {
+
+        let html = "";
+
+        data.leaderboard.forEach((zone, index) => {
+            html += `
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                padding:6px 0;
+                border-bottom:1px solid #1f2937;">
+                <span>${index+1}. ${zone[0]}</span>
+                <span style="color:#f97316;">${zone[1].toFixed(1)}</span>
+            </div>`;
+        });
+        document.getElementById("zoneLeaderboard").innerHTML = html;
+
+        // 🛰 Auto-focus on highest risk zone
+        const labels = data.leaderboard.map(z => z[0]);
+        const values = data.leaderboard.map(z => z[1]);
+
+        zoneChart.data.labels = labels;
+        zoneChart.data.datasets[0].data = values;
+        zoneChart.update();
+
+        if (data.leaderboard.length > 0) {
+            const topZoneName = data.leaderboard[0][0];
+            const topZone = ZONE_COORDINATES[topZoneName];
+            if (topZone) {
+                map.flyTo([topZone.lat, topZone.lng], 15, { duration: 1.5 });
+    }
+}
+
+    });
+}
+
+function updatePredictions() {
+
+    fetch("/predict-escalation")
+    .then(res => res.json())
+    .then(data => {
+
+        let html = "";
+
+        for (const zone in data.predictions) {
+            html += `<div>
+                        ${zone} → ${data.predictions[zone]}%
+                     </div>`;
+        }
+
+        document.getElementById("zonePredictions").innerHTML = html;
+    });
+}
+
+setInterval(updateLeaderboard, 5000);
+setInterval(updatePredictions, 7000);
+
+function updateZoneHeat() {
+
+    fetch("/zone-heat")
+    .then(res => res.json())
+    .then(data => {
+
+        zoneHeatLayer.clearLayers();
+
+        for (const zoneName in data.zone_heat) {
+
+            const intensity = data.zone_heat[zoneName];
+            const zone = ZONE_COORDINATES[zoneName];
+
+            if (!zone) continue;
+
+            let color = "lime";
+
+            if (intensity > 120) color = "red";
+            else if (intensity > 70) color = "orange";
+            else if (intensity > 30) color = "yellow";
+
+            zoneHeatLayer.addLayer(
+                L.circle([zone.lat, zone.lng], {
+                    radius: intensity * 40,
+                    color: color,
+                    fillOpacity: 0.25
+                })
+            );
+        }
+    });
+}
+
+setInterval(updateZoneHeat, 7000);
+
+// WebSocket
+socket.onmessage = function(event) {
+
+    const data = JSON.parse(event.data);
+
+    if (data.type !== "incident") return;
+
+    const inc = data.incident;
+    const stats = data.stats;
+
+    // 🚨 Real-Time Anomaly Detection
+
+if (!window.activityHistory) window.activityHistory = [];
+
+window.activityHistory.push(stats.total);
+if (window.activityHistory.length > 20) window.activityHistory.shift();
+
+// Calculate mean
+const mean = window.activityHistory.reduce((a,b)=>a+b,0) / window.activityHistory.length;
+
+// Calculate standard deviation
+const variance = window.activityHistory
+    .map(x => Math.pow(x - mean, 2))
+    .reduce((a,b)=>a+b,0) / window.activityHistory.length;
+
+const stdDev = Math.sqrt(variance);
+
+// Dynamic threshold
+const threshold = mean + (2 * stdDev);
+
+// Update chart
+if (anomalyChart.data.labels.length > 20) {
+    anomalyChart.data.labels.shift();
+    anomalyChart.data.datasets[0].data.shift();
+    anomalyChart.data.datasets[1].data.shift();
+}
+
+anomalyChart.data.labels.push("");
+anomalyChart.data.datasets[0].data.push(stats.total);
+anomalyChart.data.datasets[1].data.push(threshold);
+
+anomalyChart.update();
+
+// Visual Spike Alert
+if (stats.total > threshold && window.activityHistory.length > 5) {
+
+    document.body.style.boxShadow = "inset 0 0 80px rgba(239,68,68,0.4)";
+
+    setTimeout(()=>{
+        document.body.style.boxShadow = "none";
+    }, 800);
+}
+
+     // 🔊 Play Siren
+    if (inc.risk_level === "CRITICAL" && audioUnlocked) {
+        siren.currentTime = 0;
+        siren.play().catch(() => {});
+    }
+
+// 🧠 Real Risk Trend Tracking
+
+if (!window.totalHistory) window.totalHistory = [];
+
+window.totalHistory.push(stats.total);
+if (window.totalHistory.length > 6) window.totalHistory.shift();
+
+let trendText = "STABLE";
+let trendColor = "lime";
+
+if (window.totalHistory.length > 1) {
+
+    const last = window.totalHistory[window.totalHistory.length - 1];
+    const prev = window.totalHistory[window.totalHistory.length - 2];
+
+    if (last > prev) {
+        trendText = "ESCALATING ↑";
+        trendColor = "red";
+    }
+    else if (last < prev) {
+        trendText = "DECLINING ↓";
+        trendColor = "#22c55e";
+    }
+    else {
+        trendText = "STABLE ↔";
+        trendColor = "orange";
+    }
+}
+
+document.getElementById("riskTrend").innerText = trendText;
+document.getElementById("riskTrend").style.color = trendColor;
+
+// 🌡 Update Pressure Gauge
+
+const pressureValue = Math.min(stats.total * 15, 200);
+
+pressureChart.data.datasets[0].data = [
+    pressureValue,
+    200 - pressureValue
+];
+
+pressureChart.update();
+document.getElementById("pressureValue").innerText =
+    pressureValue.toFixed(0);
+
+    // ----------------------------
+    // 🔢 Update Counters
+    // ----------------------------
+    document.getElementById("totalCount").innerText = stats.total;
+    // Count from full stats
+    if (!window.criticalTotal) window.criticalTotal = 0;
+    if (!window.highTotal) window.highTotal = 0;
+
+    if (inc.risk_level === "CRITICAL") window.criticalTotal++;
+    if (inc.risk_level === "HIGH") window.highTotal++;
+
+    document.getElementById("criticalCount").innerText = window.criticalTotal;
+    document.getElementById("highCount").innerText = window.highTotal;
+    document.getElementById("cameraCount").innerText = 4;
+
+    // ----------------------------
+    // 🟢 System Status
+    // ----------------------------
+    if (window.criticalTotal > 0) {
+        document.getElementById("systemStatus").innerText = "CRITICAL ALERT";
+        document.getElementById("systemStatus").style.color = "red";
+    }
+    else if (window.highTotal > 0) {
+        document.getElementById("systemStatus").innerText = "HIGH RISK";
+        document.getElementById("systemStatus").style.color = "orange";
+    }
+    else {
+        document.getElementById("systemStatus").innerText = "ONLINE";
+        document.getElementById("systemStatus").style.color = "lime";
+    }
+
+    // ----------------------------
+    // 📈 Incident Rate (1 min)
+    // ----------------------------
+    if (!window.incidentMap) window.incidentMap = {};
+if (!window.incidentTimestamps) window.incidentTimestamps = [];
+
+if (!window.incidentMap[inc.id]) {
+    window.incidentMap[inc.id] = true;
+
+    const now = Date.now();
+    window.incidentTimestamps.push(now);
+}
+
+const currentTime = Date.now();
+
+window.incidentTimestamps =
+    window.incidentTimestamps.filter(t => currentTime - t < 60000);
+
+document.getElementById("incidentRate").innerText =
+    window.incidentTimestamps.length + " / min";
+
+    // ----------------------------
+    // 📊 Probability Bar
+    // ----------------------------
+    if (inc.accident_probability !== undefined) {
+        document.getElementById("probBar").style.width =
+            inc.accident_probability + "%";
+        updateChart(inc.accident_probability);
+    }
+
+    // ----------------------------
+    // 🗺 Map Marker
+    // ----------------------------
+    incidentLayer.addLayer(
+    L.circle([inc.lat, inc.lng], {
+        radius: 200,
+        color: inc.risk_level === "CRITICAL" ? "red" : "orange",
+        fillOpacity: 0.3
+    })
+);
+
+updateVehicle(
+    inc.id,
+    inc.lat + (Math.random() - 0.5) * 0.001,
+    inc.lng + (Math.random() - 0.5) * 0.001
+);
+
+// Prevent map overload
+if (incidentLayer.getLayers().length > 30) {
+    incidentLayer.clearLayers();
+}
+    // ----------------------------
+    // 📝 Log
+    // ----------------------------
+    addLog(
+        inc.type + " | " +
+        inc.risk_level + " | " +
+        inc.speed.toFixed(1) + " km/h"
+    );
+
+    // ----------------------------
+    // 📸 Snapshot Card
+    // ----------------------------
+    if (inc.image) {
+        const card = document.createElement("div");
+        card.className = "snapshotCard";
+
+        card.innerHTML = `
+            <b>${inc.type} - ${inc.risk_level}</b><br>
+            <img src="${inc.image}" width="200"><br>
+            <button onclick="downloadReport(${inc.id - 1})">
+                Download Report
+            </button>
+            ${inc.replay_gif ? `<br><img src="${inc.replay_gif}" width="200">` : ""}
+        `;
+
+        document.getElementById("snapshotContainer").prepend(card);
+    }
+const criticalTile = document.getElementById("criticalTile");
+const alertBar = document.getElementById("alertBar");
+
+// Reset classes
+criticalTile.classList.remove("glow-critical", "glow-high", "glow-normal");
+alertBar.classList.remove("critical", "high");
+
+if (inc.risk_level === "CRITICAL") {
+
+    criticalTile.classList.add("glow-critical");
+    alertBar.classList.add("critical");
+
+    document.getElementById("systemStatus").innerText = "CRITICAL CONDITION";
+    document.getElementById("systemStatus").style.color = "#dc2626";
+
+} else if (inc.risk_level === "HIGH") {
+
+    criticalTile.classList.add("glow-high");
+    alertBar.classList.add("high");
+
+    document.getElementById("systemStatus").innerText = "ELEVATED RISK";
+    document.getElementById("systemStatus").style.color = "#f97316";
+
+} else {
+
+    criticalTile.classList.add("glow-normal");
+
+    document.getElementById("systemStatus").innerText = "ONLINE";
+    document.getElementById("systemStatus").style.color = "#22c55e";
+    }
+};
+
+</script>
+
+</body>
+</html>
