@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Runtime generated data
+incidents/
+snapshots/
+reports/
+
+# Generated media
+*.gif
+*.jpg
+*.jpeg
+*.png
+*.pdf
+
+# Model weights (optional if large)
+*.pt
+*.pth
+
+# Docker
+*.tar
+
+# Temporary files
+tmp/
+temp/
+
+# Charts / analytics outputs
+risk_breakdown_*.png
+timeline_graph.png
