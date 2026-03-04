@@ -1523,10 +1523,10 @@ def generate_frames():
                 continue
 
             yield (
-                b"--frame\r\n"
-                b"Content-Type: image/jpeg\r\n\r\n" +
-                buffer.tobytes() +
-                b"\r\n"
+                    b"--frame\r\n"
+                    b"Content-Type: image/jpeg\r\n\r\n" +
+                    buffer.tobytes() +
+                    b"\r\n"
             )
 
     finally:
