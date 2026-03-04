@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE files
+.idea/
+.vscode/
+
+# Runtime generated data
+incidents/
+snapshots/
+reports/
+
+# Generated media
+*.gif
+*.jpg
+*.jpeg
+*.png
+*.pdf
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+
+# Local charts / analytics
+risk_breakdown_*.png
+timeline_graph.png
+heatmap_snapshot.jpg
