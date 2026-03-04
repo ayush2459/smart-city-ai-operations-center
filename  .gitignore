@@ -8,6 +8,7 @@ incidents/
 *.jpg
 *.gif
 *.png
+*.pdf
 heatmap_snapshot.jpg
 timeline_graph.png
 dispatch_timeline_*.png

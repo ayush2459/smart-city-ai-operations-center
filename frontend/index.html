@@ -388,7 +388,8 @@
     </div>  <!-- END layout -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-const socket = new WebSocket("ws://" + window.location.host + "/ws");
+const protocol = location.protocol === "https:" ? "wss" : "ws";
+const socket = new WebSocket(`${protocol}://${location.host}/ws`);
 // 🔊 Siren Unlock Setup
 let siren = document.getElementById("siren");
 let audioUnlocked = false;
