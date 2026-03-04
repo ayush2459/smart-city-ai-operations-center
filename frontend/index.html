@@ -389,7 +389,23 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
 const protocol = location.protocol === "https:" ? "wss" : "ws";
-const socket = new WebSocket(`${protocol}://${location.host}/ws`);
+const ws = new WebSocket(`${protocol}://${location.host}/ws`);
+
+ws.onopen = () => {
+    console.log("WebSocket connected");
+};
+
+ws.onmessage = function(event) {
+
+    const data = JSON.parse(event.data);
+
+    if (data.type !== "incident") return;
+
+    const inc = data.incident;
+    const stats = data.stats;
+
+    // your whole incident logic continues here...
+};
 // 🔊 Siren Unlock Setup
 let siren = document.getElementById("siren");
 let audioUnlocked = false;
@@ -715,7 +731,7 @@ function updateZoneHeat() {
 setInterval(updateZoneHeat, 7000);
 
 // WebSocket
-socket.onmessage = function(event) {
+ws.onmessage = function(event) {
 
     const data = JSON.parse(event.data);
 
