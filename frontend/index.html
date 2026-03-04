@@ -389,15 +389,20 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-const socket = new WebSocket(`${protocol}//${window.location.host}/ws`);
-
+const socket = new WebSocket(protocol + "//" + window.location.host + "/ws");
 socket.onopen = () => {
     console.log("WebSocket connected");
 };
 
-socket.onclose = () => {
-    console.log("WebSocket closed");
+socket.onerror = (err) => {
+    console.error("WebSocket error", err);
 };
+
+socket.onclose = () => {
+    console.log("WebSocket closed — reconnecting...");
+    setTimeout(() => location.reload(), 2000);
+};
+
 
 // 🔊 Siren Unlock Setup
 let siren = document.getElementById("siren");
@@ -724,15 +729,16 @@ function updateZoneHeat() {
 setInterval(updateZoneHeat, 7000);
 
 // WebSocket
-socket.onmessage = function(event) {
+socket.onmessage = function (event) {
 
-    const data = JSON.parse(event.data);
+    const message = JSON.parse(event.data);
 
-    if (data.type !== "incident") return;
+    if (message.type !== "incident") return;
 
-    const inc = data.incident;
-    const stats = data.stats;
+    const inc = message.incident;
+    const stats = message.stats;
 
+    console.log("New incident:", inc);
     // anomaly detection
     if (!window.activityHistory) window.activityHistory = [];
 

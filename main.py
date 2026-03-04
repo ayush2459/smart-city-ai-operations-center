@@ -4,7 +4,6 @@ import sqlite3
 import cv2
 import os
 import datetime
-import torch
 import torch.nn as nn
 import torchvision.models as models
 from torchvision import transforms
@@ -16,15 +15,20 @@ import math
 import matplotlib.pyplot as plt
 import imageio
 import psutil
-import threading
-import webbrowser
 
-
-
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+import torch
+torch.set_num_threads(2)
+logger = logging.getLogger(__name__)
+import warnings
+warnings.filterwarnings("ignore")
 from fastapi.responses import StreamingResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from utils.detector import Detector
 from utils.tracker import SimpleTracker
 from utils.incident_logic import IncidentDetector
@@ -61,6 +65,9 @@ ZONES = {
     3: {"name": "Karol Bagh", "lat": 28.6519, "lng": 77.1909, "traffic": "HIGH"},
     4: {"name": "Lajpat Nagar", "lat": 28.5677, "lng": 77.2436, "traffic": "LOW"},
 }
+from concurrent.futures import ThreadPoolExecutor
+
+gif_executor = ThreadPoolExecutor(max_workers=3)
 # ============================================
 # FASTAPI SETUP
 # ============================================
@@ -156,7 +163,7 @@ incident_logs = []
 confidence_threshold = 0.7
 heatmap_enabled = True
 dl_enabled = True
-
+last_incident_time = 0
 collision_heatmap = None
 stopped_heatmap = None
 heatmap_decay = 0.995
@@ -175,6 +182,7 @@ MAX_REPLAY_FRAMES = REPLAY_SECONDS * REPLAY_FPS
 replay_buffer = deque(maxlen=MAX_REPLAY_FRAMES)
 sequence_length = 16
 alert_toggle = False
+MAX_INCIDENTS = 500
 incident_density = {}
 dispatch_log = {}
 incident_cooldown = {}
@@ -877,26 +885,27 @@ def generate_risk_breakdown_graph(incident):
 # ============================================
 # REPLAY GIF
 # ============================================
-def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
-
+def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id, gif_path=None):
     try:
-
         gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
         gif_frames = []
 
         for frame in frames:
 
+            if frame is None:
+                continue
+
             frame_copy = frame.copy()
 
-            cv2.rectangle(frame_copy,(x1-5,y1-5),(x2+5,y2+5),(0,0,255),5)
+            cv2.rectangle(frame_copy, (x1 - 5, y1 - 5), (x2 + 5, y2 + 5), (0, 0, 255), 5)
 
             cv2.putText(
                 frame_copy,
                 f"{risk_level} | {int(speed)} km/h",
-                (x1, y1-15),
+                (x1, y1 - 15),
                 cv2.FONT_HERSHEY_DUPLEX,
                 1,
-                (0,0,255),
+                (0, 0, 255),
                 2
             )
 
@@ -904,15 +913,15 @@ def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
             gif_frames.append(frame_rgb)
 
         if len(gif_frames) == 0:
-            print("Skipping GIF generation — no frames")
+            print("Skipping GIF generation — empty buffer")
             return None
 
         imageio.mimsave(gif_path, gif_frames, duration=0.05)
 
-        return f"/snapshots/{os.path.basename(gif_path)}"
+        return gif_path
 
     except Exception as e:
-        print("GIF generation error:", e)
+        logger.error(f"GIF generation error: {e}")
         return None
 # ============================================
 # FRAME GENERATOR
@@ -971,7 +980,7 @@ def generate_frames():
 
             # Run detection every 6 frames
             if frame_index % 6 == 0 or last_results is None:
-                results, boxes = detector.detect(frame)
+                results, boxes = detector.detect(small_frame)
                 last_results = results
                 last_boxes = boxes
             else:
@@ -1175,6 +1184,7 @@ def generate_frames():
                     )
 
                     current_time = time.time()
+                    global last_incident_time
 
                     if obj_id not in incident_cooldown or \
                             current_time - incident_cooldown[obj_id] > COOLDOWN_SECONDS:
@@ -1203,11 +1213,6 @@ def generate_frames():
 
                         incident_id = len(incident_logs) + 1
                         timestamp = datetime.datetime.now().isoformat()
-
-                        # Rotate zone for next incident
-                        current_zone_id += 1
-                        if current_zone_id > len(ZONES):
-                            current_zone_id = 1
 
                         incident_data = {
                             "id": incident_id,
@@ -1267,22 +1272,34 @@ def generate_frames():
                         incident_data["image"] = f"/snapshots/{os.path.basename(snapshot_filename)}"
                         # ---------- GENERATE REPLAY GIF ----------
                         if len(incident_logs) < 20:
-                            threading.Thread(
-                                target=generate_replay_gif,
-                                args=(
-                                    list(replay_buffer),
-                                    x1, y1, x2, y2,
-                                    final_risk_level,
-                                    speed,
-                                    incident_id
-                                ),
-                                daemon=True
-                            ).start()
+                            gif_executor.submit(
+                                generate_replay_gif,
+                                list(replay_buffer),
+                                x1, y1, x2, y2,
+                                risk_level,
+                                speed,
+                                incident_id
+                            )
                         # STORE (ONLY ONCE)
                         incident_logs.append(incident_data)
+
+                        # SAVE TO DATABASE
+                        db_cursor.execute("""
+                        INSERT INTO incidents (time,type,risk_level,severity,lat,lng)
+                        VALUES (?,?,?,?,?,?)
+                        """, (
+                            incident_data["time"],
+                            incident_data["type"],
+                            incident_data["risk_level"],
+                            incident_data["severity"],
+                            incident_data["lat"],
+                            incident_data["lng"]
+                        ))
+                        db_conn.commit()
                         summary_queue.append(incident_data)
                         incident_cooldown[obj_id] = current_time
-
+                        if time.time() - last_incident_time < 3:
+                            continue
                         # BROADCAST
                         if main_loop:
                             asyncio.run_coroutine_threadsafe(
@@ -1500,7 +1517,7 @@ def generate_frames():
                 annotated = cv2.warpAffine(annotated, M, (w, h))
             annotated = cv2.resize(annotated, (1280, 720))
             # ---------- SYSTEM MONITOR ----------
-            cpu_usage = psutil.cpu_percent()
+            cpu_usage = psutil.cpu_percent(interval=None)
 
             cv2.putText(
                 annotated,
@@ -1563,7 +1580,8 @@ async def broadcast_incident(incident):
 
     for conn in active_connections.copy():
         try:
-            await conn.send_json(message)
+            if conn.client_state.name == "CONNECTED":
+                await conn.send_json(message)
         except Exception:
             if conn in active_connections:
                 active_connections.remove(conn)
@@ -1864,3 +1882,13 @@ def zone_heat():
             zone_heat[zone] += 1
 
     return {"zone_heat": zone_heat}
+@app.get("/favicon.ico")
+async def favicon():
+    return FileResponse("static/favicon.ico")
+@app.get("/health")
+def health():
+    return {
+        "status": "running",
+        "incidents": len(incident_logs),
+        "cpu": psutil.cpu_percent()
+    }

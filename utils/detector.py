@@ -22,7 +22,7 @@ class Detector:
         with torch.no_grad():
             results = self.model(
                 frame,
-                imgsz=256,
+                imgsz=320,
                 conf=0.25,
                 classes=[0, 2, 3, 5, 7],
                 device="cpu",
