@@ -933,6 +933,7 @@ def generate_frames():
     FRAME_TIME = 1.0 / TARGET_FPS
     frame_index = 0
     last_results = None
+    last_boxes = None
     vehicle_classes = [2, 3, 5, 7]
     try:
         while True:
@@ -968,9 +969,15 @@ def generate_frames():
             # ---------- DETECTION (Optimized Frame Skipping) ----------
             small_frame = cv2.resize(frame, (416, 234), interpolation=cv2.INTER_AREA)
 
-            # Run detection every 2 frames
+            frame_index += 1
+            # Run detection every 6 frames
             if frame_index % 6 == 0 or last_results is None:
-                last_results = detector.detect(small_frame)
+                results, boxes = detector.detect(frame)
+                last_results = results
+                last_boxes = boxes
+            else:
+                results = last_results
+                boxes = last_boxes
 
             results = last_results
 
