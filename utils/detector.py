@@ -4,7 +4,8 @@ import cv2
 import logging
 logging.getLogger("ultralytics").setLevel(logging.ERROR)
 torch.set_num_threads(2)
-
+import os
+os.environ["YOLO_VERBOSE"] = "False"
 class Detector:
 
     def __init__(self):
@@ -16,13 +17,12 @@ class Detector:
         self.model(dummy)
 
     def detect(self, frame):
-
-        frame = cv2.resize(frame, (640, 384))
+        frame = cv2.resize(frame, (512, 288))
 
         with torch.no_grad():
             results = self.model(
                 frame,
-                imgsz=320,
+                imgsz=256,
                 conf=0.25,
                 classes=[0, 2, 3, 5, 7],
                 device="cpu",

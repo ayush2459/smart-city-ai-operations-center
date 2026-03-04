@@ -914,7 +914,8 @@ def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
         if len(gif_frames) < 2:
             return None
 
-        imageio.mimsave(gif_path, gif_frames, duration=0.05)
+        if len(gif_frames) > 0:
+            imageio.mimsave(gif_path, gif_frames, duration=0.05)
 
         return f"/snapshots/{os.path.basename(gif_path)}"
 
