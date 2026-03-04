@@ -2,11 +2,113 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31cacae3-a0ca-440b-8d7c-faec521afb2b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/incidents.db" beforeDir="false" afterPath="$PROJECT_DIR$/incidents.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/timeline_graph.png" beforeDir="false" afterPath="$PROJECT_DIR$/timeline_graph.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_0.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_1.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_2.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_3.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_4.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_5.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_6.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/clips/clip_7.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dispatch_timeline_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dispatch_timeline_296.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_18-42-11.050806.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_19-00-55.428730.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_19-18-00.449356.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_19-21-20.074810.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_19-21-20.203682.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_19-40-03.894903.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_19-47-10.880896.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_20-06-41.733200.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-24_20-12-27.151513.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-26_12-18-30.806193.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-26_12-18-31.202676.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-26_15-13-48.125725.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-27T13-50-01.745239.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-27T13-52-23.922727.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T02-13-55.540532.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T02-26-43.183647.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T02-33-49.307177.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T02-40-01.546392.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T19-58-01.709296.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T20-13-56.922728.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T20-26-00.512056.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-02-28T20-33-06.480649.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T01-59-51.382432.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T02-12-15.461532.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T02-40-52.479617.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T17-52-50.165552.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T17-54-38.219655.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T18-05-14.792984.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T18-14-43.553983.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T18-17-03.804423.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T18-20-13.881730.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-01T18-24-18.399503.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-02T10-09-40.775732.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-02T10-31-57.423990.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-02T12-12-00.373132.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T17-09-47.069372.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T17-58-12.049113.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T17-59-54.319706.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T18-18-40.489527.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T18-19-32.847049.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T19-46-12.535118.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T19-52-28.378687.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-03T19-54-05.948714.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-04T01-21-24.656402.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-04T10-09-55.619204.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-04T11-19-43.217530.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-04T11-38-10.936268.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incident_report_2026-03-04T11-55-48.315057.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidents.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/incidents.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_114.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_13.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_156.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_175.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_243.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_264.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_27.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_296.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_50.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_52.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_60.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_70.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_71.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_79.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_82.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/risk_breakdown_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_0.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_1.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_10.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_11.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_12.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_13.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_14.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_15.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_2.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_3.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_4.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_5.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_6.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_7.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_8.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp_clips/clip_9.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/timeline_graph.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
