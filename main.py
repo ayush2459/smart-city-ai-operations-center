@@ -882,35 +882,32 @@ def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
     try:
 
         gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
-
         gif_frames = []
 
         for frame in frames:
+
             frame_copy = frame.copy()
 
-            cv2.rectangle(
-                frame_copy,
-                (x1 - 5, y1 - 5),
-                (x2 + 5, y2 + 5),
-                (0, 0, 255),
-                5
-            )
+            cv2.rectangle(frame_copy,(x1-5,y1-5),(x2+5,y2+5),(0,0,255),5)
 
             cv2.putText(
                 frame_copy,
                 f"{risk_level} | {int(speed)} km/h",
-                (x1, y1 - 15),
+                (x1, y1-15),
                 cv2.FONT_HERSHEY_DUPLEX,
                 1,
-                (0, 0, 255),
+                (0,0,255),
                 2
             )
 
             frame_rgb = cv2.cvtColor(frame_copy, cv2.COLOR_BGR2RGB)
             gif_frames.append(frame_rgb)
 
-        if len(gif_frames) > 0:
-            imageio.mimsave(gif_path, gif_frames, duration=0.05)
+        if len(gif_frames) == 0:
+            print("Skipping GIF generation — no frames")
+            return None
+
+        imageio.mimsave(gif_path, gif_frames, duration=0.05)
 
         return f"/snapshots/{os.path.basename(gif_path)}"
 
