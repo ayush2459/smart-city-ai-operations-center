@@ -969,7 +969,6 @@ def generate_frames():
             # ---------- DETECTION (Optimized Frame Skipping) ----------
             small_frame = cv2.resize(frame, (416, 234), interpolation=cv2.INTER_AREA)
 
-            frame_index += 1
             # Run detection every 6 frames
             if frame_index % 6 == 0 or last_results is None:
                 results, boxes = detector.detect(frame)
@@ -1267,7 +1266,7 @@ def generate_frames():
                         cv2.imwrite(snapshot_filename, snapshot_frame)
                         incident_data["image"] = f"/snapshots/{os.path.basename(snapshot_filename)}"
                         # ---------- GENERATE REPLAY GIF ----------
-                        if len(replay_buffer) > 10:
+                        if len(incident_logs) < 20:
                             threading.Thread(
                                 target=generate_replay_gif,
                                 args=(

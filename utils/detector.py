@@ -1,7 +1,8 @@
 from ultralytics import YOLO
 import torch
 import cv2
-
+import logging
+logging.getLogger("ultralytics").setLevel(logging.ERROR)
 torch.set_num_threads(2)
 
 class Detector:
@@ -23,7 +24,8 @@ class Detector:
                 frame,
                 imgsz=320,
                 conf=0.25,
-                classes=[0,2,3,5,7],
+                classes=[0, 2, 3, 5, 7],
+                device="cpu",
                 verbose=False
             )[0]
 
