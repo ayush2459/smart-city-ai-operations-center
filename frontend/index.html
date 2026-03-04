@@ -395,18 +395,6 @@ socket.onopen = () => {
     console.log("WebSocket connected");
 };
 
-socket.onmessage = function(event) {
-
-    const data = JSON.parse(event.data);
-
-    if (data.type !== "incident") return;
-
-    const inc = data.incident;
-    const stats = data.stats;
-
-    // your whole incident logic continues here...
-};
-
 socket.onclose = () => {
     console.log("WebSocket closed");
 };
@@ -736,7 +724,7 @@ function updateZoneHeat() {
 setInterval(updateZoneHeat, 7000);
 
 // WebSocket
-ws.onmessage = function(event) {
+socket.onmessage = function(event) {
 
     const data = JSON.parse(event.data);
 
@@ -745,11 +733,12 @@ ws.onmessage = function(event) {
     const inc = data.incident;
     const stats = data.stats;
 
+    // anomaly detection
+    if (!window.activityHistory) window.activityHistory = [];
+
+    window.activityHistory.push(stats.total);
     // 🚨 Real-Time Anomaly Detection
 
-if (!window.activityHistory) window.activityHistory = [];
-
-window.activityHistory.push(stats.total);
 if (window.activityHistory.length > 20) window.activityHistory.shift();
 
 // Calculate mean
