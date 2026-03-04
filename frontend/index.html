@@ -388,14 +388,14 @@
     </div>  <!-- END layout -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-const protocol = location.protocol === "https:" ? "wss" : "ws";
-const ws = new WebSocket(`${protocol}://${location.host}/ws`);
+const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+const socket = new WebSocket(`${protocol}//${window.location.host}/ws`);
 
-ws.onopen = () => {
+socket.onopen = () => {
     console.log("WebSocket connected");
 };
 
-ws.onmessage = function(event) {
+socket.onmessage = function(event) {
 
     const data = JSON.parse(event.data);
 
@@ -406,6 +406,11 @@ ws.onmessage = function(event) {
 
     // your whole incident logic continues here...
 };
+
+socket.onclose = () => {
+    console.log("WebSocket closed");
+};
+
 // 🔊 Siren Unlock Setup
 let siren = document.getElementById("siren");
 let audioUnlocked = false;
