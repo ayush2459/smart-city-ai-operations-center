@@ -879,13 +879,11 @@ def generate_risk_breakdown_graph(incident):
 # ============================================
 def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
 
-    if not frames:
-        return None
-
-    gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
-    gif_frames = []
-
     try:
+
+        gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
+
+        gif_frames = []
 
         for frame in frames:
             frame_copy = frame.copy()
@@ -910,9 +908,6 @@ def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
 
             frame_rgb = cv2.cvtColor(frame_copy, cv2.COLOR_BGR2RGB)
             gif_frames.append(frame_rgb)
-
-        if len(gif_frames) < 2:
-            return None
 
         if len(gif_frames) > 0:
             imageio.mimsave(gif_path, gif_frames, duration=0.05)
