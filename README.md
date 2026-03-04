@@ -33,3 +33,5 @@ AI-powered real-time traffic surveillance and incident intelligence system.
 ```bash
 pip install -r requirements.txt
 uvicorn main:app --reload
+🌐 Live Demo
+https://smartcity-ai.duckdns.org/dashboard
