@@ -878,42 +878,49 @@ def generate_risk_breakdown_graph(incident):
 # REPLAY GIF
 # ============================================
 def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id):
-    gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
 
+    if not frames:
+        return None
+
+    gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
     gif_frames = []
 
-    for frame in frames:
-        frame_copy = frame.copy()
+    try:
 
-        # Highlight box
-        cv2.rectangle(
-            frame_copy,
-            (x1 - 5, y1 - 5),
-            (x2 + 5, y2 + 5),
-            (0, 0, 255),
-            5
-        )
+        for frame in frames:
+            frame_copy = frame.copy()
 
-        cv2.putText(
-            frame_copy,
-            f"{risk_level} | {int(speed)} km/h",
-            (x1, y1 - 15),
-            cv2.FONT_HERSHEY_DUPLEX,
-            1,
-            (0, 0, 255),
-            2
-        )
+            cv2.rectangle(
+                frame_copy,
+                (x1 - 5, y1 - 5),
+                (x2 + 5, y2 + 5),
+                (0, 0, 255),
+                5
+            )
 
-        frame_rgb = cv2.cvtColor(frame_copy, cv2.COLOR_BGR2RGB)
-        gif_frames.append(frame_rgb)
+            cv2.putText(
+                frame_copy,
+                f"{risk_level} | {int(speed)} km/h",
+                (x1, y1 - 15),
+                cv2.FONT_HERSHEY_DUPLEX,
+                1,
+                (0, 0, 255),
+                2
+            )
 
-    imageio.mimsave(gif_path, gif_frames, duration=0.05)
+            frame_rgb = cv2.cvtColor(frame_copy, cv2.COLOR_BGR2RGB)
+            gif_frames.append(frame_rgb)
 
-    return f"/snapshots/{os.path.basename(gif_path)}"
+        if len(gif_frames) < 2:
+            return None
 
-def open_browser():
-    webbrowser.open("http://127.0.0.1:8000/dashboard")
+        imageio.mimsave(gif_path, gif_frames, duration=0.05)
 
+        return f"/snapshots/{os.path.basename(gif_path)}"
+
+    except Exception as e:
+        print("GIF generation error:", e)
+        return None
 # ============================================
 # FRAME GENERATOR
 # ============================================
