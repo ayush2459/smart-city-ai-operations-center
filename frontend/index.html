@@ -938,7 +938,6 @@ if (incidentLayer.getLayers().length > 30) {
             <button onclick="downloadReport(${inc.id - 1})">
                 Download Report
             </button>
-            ${inc.replay_gif ? `<br><img src="${inc.replay_gif}" width="200">` : ""}
         `;
 
         document.getElementById("snapshotContainer").prepend(card);

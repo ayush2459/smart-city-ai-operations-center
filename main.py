@@ -9,13 +9,11 @@ import torchvision.models as models
 from torchvision import transforms
 import numpy as np
 import time
-import csv
 import asyncio
 import math
-import matplotlib.pyplot as plt
-import imageio
 import psutil
-
+import matplotlib.pyplot as plt
+import csv
 import logging
 logging.basicConfig(
     level=logging.INFO,
@@ -65,9 +63,7 @@ ZONES = {
     3: {"name": "Karol Bagh", "lat": 28.6519, "lng": 77.1909, "traffic": "HIGH"},
     4: {"name": "Lajpat Nagar", "lat": 28.5677, "lng": 77.2436, "traffic": "LOW"},
 }
-from concurrent.futures import ThreadPoolExecutor
-
-gif_executor = ThreadPoolExecutor(max_workers=3)
+cv2.setNumThreads(1)
 # ============================================
 # FASTAPI SETUP
 # ============================================
@@ -176,10 +172,6 @@ previous_frame_time = None
 object_motion = {}
 FPS_ASSUMED = 30
 METERS_PER_PIXEL = 0.08   # adjust based on camera height
-REPLAY_SECONDS = 2
-REPLAY_FPS = 20
-MAX_REPLAY_FRAMES = REPLAY_SECONDS * REPLAY_FPS
-replay_buffer = deque(maxlen=MAX_REPLAY_FRAMES)
 sequence_length = 16
 alert_toggle = False
 MAX_INCIDENTS = 500
@@ -885,44 +877,7 @@ def generate_risk_breakdown_graph(incident):
 # ============================================
 # REPLAY GIF
 # ============================================
-def generate_replay_gif(frames, x1, y1, x2, y2, risk_level, speed, incident_id, gif_path=None):
-    try:
-        gif_path = f"{SAVE_PATH}/incident_{incident_id}.gif"
-        gif_frames = []
 
-        for frame in frames:
-
-            if frame is None:
-                continue
-
-            frame_copy = frame.copy()
-
-            cv2.rectangle(frame_copy, (x1 - 5, y1 - 5), (x2 + 5, y2 + 5), (0, 0, 255), 5)
-
-            cv2.putText(
-                frame_copy,
-                f"{risk_level} | {int(speed)} km/h",
-                (x1, y1 - 15),
-                cv2.FONT_HERSHEY_DUPLEX,
-                1,
-                (0, 0, 255),
-                2
-            )
-
-            frame_rgb = cv2.cvtColor(frame_copy, cv2.COLOR_BGR2RGB)
-            gif_frames.append(frame_rgb)
-
-        if len(gif_frames) == 0:
-            print("Skipping GIF generation — empty buffer")
-            return None
-
-        imageio.mimsave(gif_path, gif_frames, duration=0.05)
-
-        return gif_path
-
-    except Exception as e:
-        logger.error(f"GIF generation error: {e}")
-        return None
 # ============================================
 # FRAME GENERATOR
 # ============================================
@@ -953,7 +908,6 @@ def generate_frames():
                 break
 
             annotated = frame.copy()
-            replay_buffer.append(frame.copy())
             # ---------- INIT HEATMAP ----------
             if collision_heatmap is None:
                 collision_heatmap = np.zeros(frame.shape[:2], dtype=np.float32)
@@ -976,10 +930,10 @@ def generate_frames():
 
             # ---------- DETECTION ----------
             # ---------- DETECTION (Optimized Frame Skipping) ----------
-            small_frame = cv2.resize(frame, (416, 234), interpolation=cv2.INTER_AREA)
+            small_frame = cv2.resize(frame, (320, 180), interpolation=cv2.INTER_AREA)
 
-            # Run detection every 6 frames
-            if frame_index % 6 == 0 or last_results is None:
+            # Run detection every 10 frames
+            if frame_index % 10 == 0 or last_results is None:
                 results, boxes = detector.detect(small_frame)
                 last_results = results
                 last_boxes = boxes
@@ -1003,7 +957,7 @@ def generate_frames():
             frame_confidence = 0
 
             if dl_enabled:
-                tensor_frame = transform(frame).to(device)
+                tensor_frame = transform(frame).to(device, non_blocking=True)
                 frame_buffer.append(tensor_frame)
 
                 if len(frame_buffer) > sequence_length:
@@ -1270,16 +1224,6 @@ def generate_frames():
                         snapshot_filename = f"{SAVE_PATH}/incident_{incident_id}.jpg"
                         cv2.imwrite(snapshot_filename, snapshot_frame)
                         incident_data["image"] = f"/snapshots/{os.path.basename(snapshot_filename)}"
-                        # ---------- GENERATE REPLAY GIF ----------
-                        if len(incident_logs) < 20:
-                            gif_executor.submit(
-                                generate_replay_gif,
-                                list(replay_buffer),
-                                x1, y1, x2, y2,
-                                risk_level,
-                                speed,
-                                incident_id
-                            )
                         # STORE (ONLY ONCE)
                         incident_logs.append(incident_data)
 
@@ -1298,8 +1242,12 @@ def generate_frames():
                         db_conn.commit()
                         summary_queue.append(incident_data)
                         incident_cooldown[obj_id] = current_time
-                        if time.time() - last_incident_time < 3:
+                        current_time_check = time.time()
+
+                        if current_time_check - last_incident_time < 3:
                             continue
+
+                        last_incident_time = current_time_check
                         # BROADCAST
                         if main_loop:
                             asyncio.run_coroutine_threadsafe(
@@ -1559,7 +1507,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
     try:
         while True:
-            await websocket.receive_text()
+            await asyncio.sleep(10)
     except Exception:
         pass
     finally:
